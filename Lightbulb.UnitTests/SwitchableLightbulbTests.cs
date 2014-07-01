@@ -1,45 +1,48 @@
 ﻿using System;
 using LightbulbInterview;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace Lightbulb.UnitTests
 {
     [TestClass]
     public class SwitchableLightbulbTests
     {
+        private class TestBulb : LightbulbBase
+        {
+            public TestBulb(int lumens, int wattage) : base(lumens, wattage)
+            {
+                
+            }
+        }
+
         [TestMethod]
         public void Ctor_ValidLumensAndWattage_Pass()
         {
             const int lumens = 500;
             const int wattage = 8;
-            var moq = new Mock<LightbulbBase>(lumens, wattage);
-            LightbulbBase bulb = moq.Object;
+            LightbulbBase bulb = new TestBulb(lumens, wattage);
 
             Assert.IsNotNull(bulb);
             Assert.AreEqual(lumens, bulb.Lumens);
             Assert.AreEqual(wattage, bulb.Wattage);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod, ExpectedException(typeof (InvalidOperationException))]
         public void Ctor_LumensZero_InvalidOperationException()
         {
-            var moq = new Mock<LightbulbBase>(MockBehavior.Default, 0 , 8);
-            LightbulbBase bulb = moq.Object;
+            new TestBulb(0, 8);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod, ExpectedException(typeof (InvalidOperationException))]
         public void Ctor_WattageZero_InvalidOperationException()
         {
-            var moq = new Mock<LightbulbBase>(500, 0);
-            LightbulbBase bulb = moq.Object;
+            new TestBulb(500, 0);
         }
 
         [TestMethod]
         public void New_LightIsZero_Pass()
         {
-            var moq = new Mock<LightbulbBase>(500, 10);
-            var bulb = moq.Object;
+            LightbulbBase bulb = new TestBulb(500, 10);
 
             Assert.AreEqual(0, bulb.Light);
         }
@@ -48,8 +51,7 @@ namespace Lightbulb.UnitTests
         public void Switch_LightEqualsLumens_Pass()
         {
             const int lumens = 600;
-            var moq = new Mock<LightbulbBase>(lumens, 10);
-            var bulb = moq.Object;
+            LightbulbBase bulb = new TestBulb(lumens, 10);
 
             bulb.Switch();
 
@@ -59,8 +61,8 @@ namespace Lightbulb.UnitTests
         [TestMethod]
         public void SwitchTwice_LightIsZero_Pass()
         {
-            var moq = new Mock<LightbulbBase>(500, 10);
-            LightbulbBase bulb = moq.Object;
+
+            LightbulbBase bulb = new TestBulb(500, 10);
 
             bulb.Switch();
             bulb.Switch();
@@ -71,8 +73,7 @@ namespace Lightbulb.UnitTests
         [TestMethod]
         public void EnergyUsed_ZeroTimeSpan_ZeroEnergyUsed()
         {
-            var moq = new Mock<LightbulbBase>(500, 10);
-            LightbulbBase bulb = moq.Object;
+            LightbulbBase bulb = new TestBulb(500, 10);
             double energyUsed = bulb.EnergyUsed(TimeSpan.Zero);
             Assert.AreEqual(0, energyUsed);
         }
@@ -81,11 +82,10 @@ namespace Lightbulb.UnitTests
         public void EnergyUsed_TenWattageFiveHours_PointZeroFiveKwh()
         {
             const int wattage = 10;
-            var timeOn = TimeSpan.FromHours(5);
+            TimeSpan timeOn = TimeSpan.FromHours(5);
             double expected = wattage*timeOn.TotalHours/1000;
 
-            var moq = new Mock<LightbulbBase>(500, wattage);
-            LightbulbBase bulb = moq.Object;
+            LightbulbBase bulb = new TestBulb(500, wattage);
 
             double actual = bulb.EnergyUsed(timeOn);
 

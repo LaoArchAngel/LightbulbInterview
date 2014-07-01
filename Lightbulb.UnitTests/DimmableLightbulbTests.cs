@@ -8,11 +8,18 @@ namespace Lightbulb.UnitTests
     [TestClass]
     public class DimmableLightbulbTests
     {
+        private class TestDimmable : DimmableLightbulbBase
+        {
+            public TestDimmable(int lumens, int wattage) : base(lumens, wattage)
+            {
+                
+            }
+        }
+
         [TestMethod, ExpectedException(typeof(InvalidOperationException))]
         public void SetOutputWhenOutputIsZero_NewOutputIsZero_InvalidOperationException()
         {
-            var mock = new Mock<DimmableLightbulbBase>(500, 10);
-            DimmableLightbulbBase bulb = mock.Object;
+            DimmableLightbulbBase bulb = new TestDimmable(500,10);
             bulb.SetOutput(0);
         }
 
