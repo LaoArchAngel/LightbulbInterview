@@ -11,7 +11,7 @@ namespace Lightbulb.UnitTests
         {
             public TestBulb(int lumens, int wattage) : base(lumens, wattage)
             {
-                
+                // THIS IS A UNIT-TESTING STUB ONLY! No changes should be make here.
             }
         }
 
