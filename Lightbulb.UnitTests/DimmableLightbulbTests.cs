@@ -12,7 +12,7 @@ namespace Lightbulb.UnitTests
         {
             public TestDimmable(int lumens, int wattage) : base(lumens, wattage)
             {
-                
+                // THIS IS A UNIT-TESTING STUB ONLY! No changes should be make here.
             }
         }
 
