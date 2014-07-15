@@ -16,7 +16,7 @@ namespace Lightbulb.UnitTests
             }
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod]
         public void SetOutputWhenOutputIsNotZero_SwitchNotCalled_InvalidOperationException()
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
