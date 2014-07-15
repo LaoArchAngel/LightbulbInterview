@@ -17,14 +17,20 @@ namespace Lightbulb.UnitTests
         }
 
         [TestMethod, ExpectedException(typeof(InvalidOperationException))]
-        public void SetOutputWhenOutputIsZero_NewOutputIsZero_InvalidOperationException()
+        public void SetOutputWhenOutputIsNotZero_SwitchNotCalled_InvalidOperationException()
         {
-            DimmableLightbulbBase bulb = new TestDimmable(500,10);
-            bulb.SetOutput(0);
+            var mock = new Mock<DimmableLightbulbBase>(500, 10);
+            mock.Setup(dlb => dlb.Switch()).Verifiable();
+            DimmableLightbulbBase bulb = mock.Object;
+
+            bulb.SetOutput(10);
+            bulb.SetOutput(15);
+
+            mock.Verify(dlb => dlb.Switch(), Times.AtMostOnce);
         }
 
         [TestMethod]
-        public void SetOutputWhenOutputIsZero_NewOutputIsTen_SwitchCalled()
+        public void SetOutputWhenOutputIsZero_NewOutputIsNotZero_SwitchCalled()
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
             mock.Setup(dlb => dlb.Switch()).Verifiable();
