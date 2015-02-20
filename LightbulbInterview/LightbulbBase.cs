@@ -27,6 +27,11 @@ namespace LightbulbInterview
             return Wattage*timeOn.TotalHours;
         }
 
+        public SwitchState State
+        {
+            get { return SwitchState; }
+        }
+
         public virtual void Switch()
         {
         }
