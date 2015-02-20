@@ -5,7 +5,7 @@ namespace LightbulbInterview
 {
     public abstract class LightbulbBase : ISwitchable
     {
-        protected PowerState State;
+        protected SwitchState SwitchState = SwitchState.Off;
 
         public int Lumens { get; private set; }
 
