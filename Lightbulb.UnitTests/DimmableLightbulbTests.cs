@@ -8,14 +8,6 @@ namespace Lightbulb.UnitTests
     [TestClass]
     public class DimmableLightbulbTests
     {
-        private class TestDimmable : DimmableLightbulbBase
-        {
-            public TestDimmable(int lumens, int wattage) : base(lumens, wattage)
-            {
-                // THIS IS A UNIT-TESTING STUB ONLY! No changes should be make here.
-            }
-        }
-
         [TestMethod]
         public void SetOutputWhenOutputIsNotZero_SwitchNotCalled_InvalidOperationException()
         {
