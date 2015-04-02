@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightbulbInterview", "LightbulbInterview\LightbulbInterview.csproj", "{9661573A-D1C3-48D4-BA2D-F78C99501140}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Switches", "Switches\Switches.csproj", "{E7A0BB54-2C43-42CD-928B-A401F1471399}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightbulb.UnitTests", "Lightbulb.UnitTests\Lightbulb.UnitTests.csproj", "{BBCF4B84-689A-4740-9385-85FB6AF48144}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B8262892-1C15-4236-8A75-35FE45D9926F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
