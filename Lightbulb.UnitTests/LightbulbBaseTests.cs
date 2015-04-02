@@ -6,11 +6,16 @@ namespace LightbulbInterview.UnitTests
 {
     public class LightbulbBaseTests
     {
-        private class TestBulb : LightbulbBase
+        public static IEnumerable<object[]> EnergyUsedData
         {
-            public TestBulb(int lumens, int wattage) : base(lumens, wattage)
+            get
             {
-                // THIS IS A UNIT-TESTING STUB ONLY! No changes should be make here.
+                return new[]
+                {
+                    new object[] {TimeSpan.FromHours(5), 5},
+                    new object[] {TimeSpan.FromMinutes(35), 10},
+                    new object[] {TimeSpan.FromMinutes(143), 1}
+                };
             }
         }
 
@@ -41,7 +46,7 @@ namespace LightbulbInterview.UnitTests
         public void Ctor_WHEN_myWattage_greaterthan_zero_THEN_bulb_Wattage_equuals_myWattage(int myWattage)
         {
             const int lumens = 5;
-            
+
             LightbulbBase bulb = new TestBulb(lumens, myWattage);
 
             Assert.Equal(myWattage, bulb.Wattage);
@@ -83,7 +88,7 @@ namespace LightbulbInterview.UnitTests
         public void Light_WHEN_Switch_called_THEN_equals_Lumens(int myLumens)
         {
             const int wattage = 10;
-            
+
             LightbulbBase bulb = new TestBulb(myLumens, wattage);
 
             bulb.Switch();
@@ -96,7 +101,7 @@ namespace LightbulbInterview.UnitTests
         {
             const int lumens = 500;
             const int wattage = 10;
-            
+
             LightbulbBase bulb = new TestBulb(lumens, wattage);
 
             bulb.Switch();
@@ -107,42 +112,38 @@ namespace LightbulbInterview.UnitTests
 
         [Theory]
         [MemberData("EnergyUsedData")]
-        public void EnergyUsed_WHEN_timeOn_positive_THEN_equals_wattage_times_hoursOn_dividedby_1000(TimeSpan timeOn, int myWattage)
+        public void EnergyUsed_WHEN_timeOn_positive_THEN_equals_wattage_times_hoursOn_dividedby_1000(TimeSpan timeOn,
+            int myWattage)
         {
             const int lumens = 500;
 
-            var expected = timeOn.TotalHours * myWattage / 1000; // EnergyUsed read in KwH.
+            var expected = timeOn.TotalHours*myWattage/1000; // EnergyUsed read in KwH.
             LightbulbBase bulb = new TestBulb(lumens, myWattage);
-            double actual = bulb.EnergyUsed(TimeSpan.Zero);
-            
+            var actual = bulb.EnergyUsed(timeOn);
+
             Assert.Equal(expected, actual);
         }
 
-        public static IEnumerable<object[]> EnergyUsedData
-        {
-            get
-            {
-                return new[]
-                {
-                    new object[] {TimeSpan.FromHours(5), 5},
-                    new object[] {TimeSpan.FromMinutes(35), 10},
-                    new object[] {TimeSpan.FromMinutes(143), 1}
-                };
-            }
-        }
-        
         [Fact]
         public void EnergyUsed_TenWattageFiveHours_PointZeroFiveKwh()
         {
             const int wattage = 10;
-            TimeSpan timeOn = TimeSpan.FromHours(5);
-            double expected = wattage*timeOn.TotalHours/1000;
+            var timeOn = TimeSpan.FromHours(5);
+            var expected = wattage*timeOn.TotalHours/1000;
 
             LightbulbBase bulb = new TestBulb(500, wattage);
 
-            double actual = bulb.EnergyUsed(timeOn);
+            var actual = bulb.EnergyUsed(timeOn);
 
             Assert.Equal(expected, actual);
+        }
+
+        private class TestBulb : LightbulbBase
+        {
+            public TestBulb(int lumens, int wattage) : base(lumens, wattage)
+            {
+                // THIS IS A UNIT-TESTING STUB ONLY! No changes should be make here.
+            }
         }
     }
 }
