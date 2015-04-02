@@ -6,53 +6,70 @@ namespace LightbulbInterview.UnitTests
 {
     public class DimmableLightbulbBaseTests
     {
-        [Fact]
-        public void SetOutputWhenOutputIsNotZero_SwitchNotCalled_InvalidOperationException()
+        [Theory]
+        [InlineData(10, 15), InlineData(5, 4), InlineData(1, 30)]
+        public void SetOutput_WHEN_newOutput_and_currentOutput_greaterthan_zero_THEN_Switch_not_called(int currentOutput, int newOutput)
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
             mock.Setup(dlb => dlb.Switch()).Verifiable();
             DimmableLightbulbBase bulb = mock.Object;
-
+            
+            // Setup
             bulb.SetOutput(10);
+            mock.ResetCalls();
+
+            // Test
             bulb.SetOutput(15);
 
-            mock.Verify(dlb => dlb.Switch(), Times.AtMostOnce);
+            mock.Verify(dlb => dlb.Switch(), Times.Never);
         }
 
-        [Fact]
-        public void SetOutputWhenOutputIsZero_NewOutputIsNotZero_SwitchCalled()
+        [Theory]
+        [InlineData(10), InlineData(1), InlineData(13)]
+        public void SetOutput_WHEN_current_output_equals_zero_and_newOutput_greaterthan_zero_THEN_Switch_called(int newOutput)
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
             mock.Setup(dlb => dlb.Switch()).Verifiable();
             DimmableLightbulbBase bulb = mock.Object;
-            bulb.SetOutput(10);
+            
+            bulb.SetOutput(newOutput);
 
             mock.Verify();
         }
 
-        [Fact]
-        public void SetOutputWhenOutputIsNotZero_NewOutputIsZero_SwitchCalled()
+        [Theory]
+        [InlineData(10), InlineData(1), InlineData(100)]
+        public void SetOutput_Zero_WHEN_currentOutput_greaterthan_zero_THEN_Switch_called(int currentOutput)
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
             mock.Setup(dlb => dlb.Switch()).Verifiable();
             DimmableLightbulbBase bulb = mock.Object;
 
-            bulb.SetOutput(10);
-            mock.Verify(dlb => dlb.Switch(), Times.AtMostOnce);
+            // Setup
+            bulb.SetOutput(currentOutput);
+            mock.ResetCalls();
 
+            // Test
             bulb.SetOutput(0);
-            mock.Verify(dlb => dlb.Switch(), Times.Exactly(2));
+            mock.Verify();
         }
 
-        //[Fact, ExpectedException(typeof(InvalidOperationException))]
-        public void SetOutput_NewOutputIsSameAsOld_InvalidOperationException()
+        [Theory]
+        [InlineData(5), InlineData(0), InlineData(1000)]
+        public void SetOutput_WHEN_newOutput_equals_current_output_THEN_throws_InvalidOperationException(int newOutput)
         {
             var mock = new Mock<DimmableLightbulbBase>(500, 10);
             mock.Setup(dlb => dlb.Switch()).Verifiable();
             DimmableLightbulbBase bulb = mock.Object;
 
-            bulb.SetOutput(10);
-            bulb.SetOutput(10);
+            if (newOutput > 0)
+            {
+                bulb.SetOutput(newOutput);
+            }
+
+            var ex = Record.Exception(() => bulb.SetOutput(newOutput));
+
+            Assert.IsType<InvalidOperationException>(ex);
         }
     }
 }
